@@ -1339,3 +1339,81 @@ db.tmdb_movies.aggregate([
 - **Version**: 1.0 Final
 - **Word Count**: ~8,500 words
 - **Team Members**: [Add names]
+
+
+2. ✅ Document Architecture Clearly
+
+What it means in plain English:
+This is not about changing code. This is about how you explain your system in your report / slides / viva.
+
+Your project is doing something called polyglot persistence: you're using two different databases in one application (MariaDB and MongoDB), and you're doing that on purpose because each DB solves a different type of problem well. Polyglot persistence is literally defined as “using multiple database technologies in a single application, each chosen for its strengths in handling a specific kind of data or query.” 
+CircleCI
+ 
+Medium
+ 
+Dremio
+
+If you write that clearly, you score higher because:
+
+You’re not just “we used both because the prof said NoSQL.”
+
+You’re showing design reasoning.
+
+Here's how to describe your architecture so it sounds intentional and professional:
+
+MariaDB (SQL side)
+
+Stores structured tables: users, movies, ratings, links.
+
+Enforces relationships: e.g. a rating belongs to a user and a movie. This is classic relational integrity using primary keys and foreign keys to keep data consistent, which is what SQL databases are built for. 
+OWOX
+ 
+celerdata.com
+
+Runs analytics like:
+
+average rating per movie,
+
+how many votes a movie has,
+
+how many high ratings a user gave.
+
+Strength: joins, GROUP BY/HAVING, constraints.
+
+MongoDB (NoSQL side)
+
+Stores flexible movie metadata from TMDB: overview text, genres, keywords, runtime, revenue.
+
+Can handle huge, messy, evolving movie info per film without forcing you to design 10 relational tables and joins.
+
+Supports text/regex-style search over descriptions and keywords and can run aggregation pipelines over those documents. MongoDB is often used this way: store semi-structured objects as full documents, and query them with flexible filters. 
+CircleCI
+ 
+Stack Overflow
+
+Your GUI (the Tkinter app)
+
+Pulls rating stats + movieId from MariaDB.
+
+Uses links.tmdbId from MariaDB to fetch that same movie in MongoDB by tmdbId.
+
+Displays everything together in one “View Details” panel.
+
+When you say this out loud / in the report, you’re basically saying:
+
+We implemented a polyglot persistence architecture. The SQL database handles relational user/rating data and analytics. The NoSQL database handles large, descriptive, semi-structured movie metadata. Our GUI is the integration layer that joins them together at runtime.
+
+That exact message matches what multiple sources describe as the whole point of polyglot persistence: use the right tool for each job instead of trying to force one database to do everything — which improves flexibility and performance. 
+CircleCI
+ 
+Medium
+ 
+FanRuan Software
+
+Why this matters to you:
+
+It shows you understand the “why,” not just the “how.”
+
+Markers love this because it sounds like system design, not just coding.
+
+So #2 = write / present that story clearly.
