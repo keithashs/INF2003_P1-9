@@ -1247,7 +1247,8 @@ class MovieApp(tk.Tk):
     ###########################################################################
     
     def handle_add_update_rating(self):
-        """Add or update rating."""
+        """Add or update rating with referential integrity validation."""
+        # Validate input types
         try:
             uid = int(self.rate_user_id_var.get().strip())
             mid = int(self.rate_movie_id_var.get().strip())
@@ -1261,10 +1262,42 @@ class MovieApp(tk.Tk):
             messagebox.showerror("Input Error", "Rating must be a number like 3.5.")
             return
         
+        # Validate rating range
         if r_val < 0.5 or r_val > 5.0:
             messagebox.showerror("Input Error", "Rating must be between 0.5 and 5.0.")
             return
         
+        # ✅ VALIDATION: Check if user exists
+        user_info = get_user(uid)
+        if not user_info:
+            messagebox.showerror("Validation Error", 
+                               f"User ID {uid} does not exist in database.\n"
+                               f"Please create the user first in the Users tab.")
+            self.rating_status_text.config(state="normal")
+            self.rating_status_text.insert(
+                tk.END,
+                f"[VALIDATION ERROR] User {uid} not found - rating rejected\n"
+            )
+            self.rating_status_text.see(tk.END)
+            self.rating_status_text.config(state="disabled")
+            return
+        
+        # ✅ VALIDATION: Check if movie exists
+        movie_info = get_movie_details(mid)
+        if not movie_info:
+            messagebox.showerror("Validation Error", 
+                               f"Movie ID {mid} does not exist in database.\n"
+                               f"Cannot rate a non-existent movie.")
+            self.rating_status_text.config(state="normal")
+            self.rating_status_text.insert(
+                tk.END,
+                f"[VALIDATION ERROR] Movie {mid} not found - rating rejected\n"
+            )
+            self.rating_status_text.see(tk.END)
+            self.rating_status_text.config(state="disabled")
+            return
+        
+        # Validation passed - proceed with rating
         ok = add_or_update_rating(uid, mid, r_val)
         
         self.rating_status_text.config(state="normal")
@@ -1273,7 +1306,8 @@ class MovieApp(tk.Tk):
             if saved_rating:
                 self.rating_status_text.insert(
                     tk.END,
-                    f"[OK] Rating saved -> user {uid}, movie {mid}, rating {saved_rating['rating']} (verified)\n"
+                    f"[OK] Rating saved -> user {uid} ({user_info['username']}), "
+                    f"movie {mid} ({movie_info['title']}), rating {saved_rating['rating']} (verified)\n"
                 )
             else:
                 self.rating_status_text.insert(
@@ -1292,12 +1326,36 @@ class MovieApp(tk.Tk):
         self.rating_status_text.config(state="disabled")
     
     def handle_delete_rating(self):
-        """Delete rating."""
+        """Delete rating with validation."""
         try:
             uid = int(self.rate_user_id_var.get().strip())
             mid = int(self.rate_movie_id_var.get().strip())
         except ValueError:
             messagebox.showerror("Input Error", "User ID and Movie ID must be integers.")
+            return
+        
+        # ✅ VALIDATION: Check if rating exists before deleting
+        existing_rating = get_user_rating(uid, mid)
+        if not existing_rating:
+            messagebox.showwarning("Not Found", 
+                                  f"No rating found for User {uid} and Movie {mid}.\n"
+                                  f"Nothing to delete.")
+            self.rating_status_text.config(state="normal")
+            self.rating_status_text.insert(
+                tk.END,
+                f"[WARNING] No rating to delete for user {uid}, movie {mid}\n"
+            )
+            self.rating_status_text.see(tk.END)
+            self.rating_status_text.config(state="disabled")
+            return
+        
+        # Confirm deletion
+        confirm = messagebox.askyesno(
+            "Confirm Delete",
+            f"Delete rating {existing_rating['rating']} from User {uid} for Movie {mid}?"
+        )
+        
+        if not confirm:
             return
         
         ok = delete_rating(uid, mid)
@@ -1306,7 +1364,7 @@ class MovieApp(tk.Tk):
         if ok:
             self.rating_status_text.insert(
                 tk.END,
-                f"[OK] Deleted rating for user {uid}, movie {mid}\n"
+                f"[OK] Deleted rating {existing_rating['rating']} for user {uid}, movie {mid}\n"
             )
             self.rate_user_id_var.set("")
             self.rate_movie_id_var.set("")
