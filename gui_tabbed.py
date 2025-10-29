@@ -18,7 +18,7 @@ def is_valid_email(email):
 
 DB_HOST = "localhost"
 DB_USER = "root"
-DB_PASS = "123455"
+DB_PASS = "12345"
 DB_NAME = "movies_db"
 
 MONGO_HOST = "localhost"
