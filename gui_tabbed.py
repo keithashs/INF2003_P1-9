@@ -1,4 +1,5 @@
 import pymysql
+from pymongo import MongoClient
 import tkinter as tk
 from tkinter import ttk, messagebox
 import time
@@ -17,12 +18,17 @@ def is_valid_email(email):
 
 DB_HOST = "localhost"
 DB_USER = "root"
-DB_PASS = "123456"
+DB_PASS = "123455"
 DB_NAME = "movies_db"
 
 MONGO_HOST = "localhost"
 MONGO_PORT = 27017
 MONGO_DB = "movies_nosql"
+
+# MongoDB Connection
+mongo_client = MongoClient(f"mongodb://{MONGO_HOST}:{MONGO_PORT}/")
+mongo_db = mongo_client[MONGO_DB]
+tmdb_collection = mongo_db["tmdb_movies"]
 
 
 def get_connection():
@@ -95,6 +101,145 @@ def get_movie_details(movie_id):
             return row
     finally:
         conn.close()
+
+
+def get_tmdb_metadata(tmdb_id):
+    """Get TMDB metadata from MongoDB by tmdbId."""
+    if not tmdb_id:
+        return None
+    
+    try:
+        # Convert to int if it's a string
+        if isinstance(tmdb_id, str):
+            tmdb_id = int(tmdb_id)
+        
+        doc = tmdb_collection.find_one({"tmdbId": tmdb_id})
+        
+        if not doc:
+            return None
+        
+        return {
+            "tmdbId": doc.get("tmdbId"),
+            "title": doc.get("title"),
+            "overview": doc.get("overview"),
+            "genres": doc.get("genres"),
+            "vote_average": doc.get("vote_average"),
+            "vote_count": doc.get("vote_count"),
+            "revenue": doc.get("revenue"),
+            "runtime": doc.get("runtime"),
+            "original_language": doc.get("original_language"),
+            "release_date": doc.get("release_date"),
+            "tagline": doc.get("tagline"),
+            "popularity": doc.get("popularity")
+        }
+    except Exception as e:
+        print(f"MongoDB error: {e}")
+        return None
+
+
+###############################################################################
+# 3. MONGODB HELPER FUNCTIONS - NoSQL Operations
+###############################################################################
+
+def search_movies_by_genre_mongo(genre):
+    """Search MongoDB by genre - demonstrates NoSQL flexible querying."""
+    try:
+        start_time = time.time()
+        results = tmdb_collection.find(
+            {"genres": {"$regex": genre, "$options": "i"}},
+            {"tmdbId": 1, "title": 1, "genres": 1, "vote_average": 1, "overview": 1, "runtime": 1}
+        ).limit(50)
+        results_list = list(results)
+        exec_time = time.time() - start_time
+        return results_list, exec_time
+    except Exception as e:
+        print(f"MongoDB genre search error: {e}")
+        return [], 0
+
+
+def search_movies_by_keyword_mongo(keyword):
+    """Search by movie keywords/tags - NoSQL advantage."""
+    try:
+        start_time = time.time()
+        results = tmdb_collection.find(
+            {"keywords": {"$regex": keyword, "$options": "i"}},
+            {"tmdbId": 1, "title": 1, "keywords": 1, "genres": 1, "vote_average": 1}
+        ).limit(50)
+        results_list = list(results)
+        exec_time = time.time() - start_time
+        return results_list, exec_time
+    except Exception as e:
+        print(f"MongoDB keyword search error: {e}")
+        return [], 0
+
+
+def get_genre_statistics_mongo():
+    """Use MongoDB aggregation pipeline for genre analysis."""
+    try:
+        start_time = time.time()
+        pipeline = [
+            {"$match": {"genres": {"$exists": True, "$ne": ""}}},
+            {"$group": {
+                "_id": "$genres",
+                "count": {"$sum": 1},
+                "avg_rating": {"$avg": "$vote_average"},
+                "avg_revenue": {"$avg": "$revenue"}
+            }},
+            {"$sort": {"count": -1}},
+            {"$limit": 20}
+        ]
+        results = list(tmdb_collection.aggregate(pipeline))
+        exec_time = time.time() - start_time
+        return results, exec_time
+    except Exception as e:
+        print(f"MongoDB aggregation error: {e}")
+        return [], 0
+
+
+def find_similar_movies_mongo(tmdb_id):
+    """Find similar movies by genre - NoSQL flexible matching."""
+    try:
+        start_time = time.time()
+        current = tmdb_collection.find_one({"tmdbId": tmdb_id})
+        if not current or not current.get('genres'):
+            return [], 0
+        
+        # Get first genre as main category
+        first_genre = current['genres'].split(',')[0].strip() if ',' in current['genres'] else current['genres']
+        
+        similar = tmdb_collection.find(
+            {
+                "tmdbId": {"$ne": tmdb_id},
+                "genres": {"$regex": first_genre, "$options": "i"}
+            },
+            {"tmdbId": 1, "title": 1, "genres": 1, "vote_average": 1, "overview": 1}
+        ).limit(10)
+        results_list = list(similar)
+        exec_time = time.time() - start_time
+        return results_list, exec_time
+    except Exception as e:
+        print(f"MongoDB similar movies error: {e}")
+        return [], 0
+
+
+def compare_sql_vs_nosql_performance(keyword):
+    """Compare query performance between MariaDB and MongoDB."""
+    # SQL: Search in titles (structured data)
+    sql_start = time.time()
+    sql_results, _ = search_movies_by_title(keyword)
+    sql_time = time.time() - sql_start
+    
+    # NoSQL: Search in overview/genres (unstructured data)
+    mongo_start = time.time()
+    mongo_results, _ = search_movies_by_keyword_mongo(keyword)
+    mongo_time = time.time() - mongo_start
+    
+    return {
+        'sql_time': sql_time,
+        'sql_count': len(sql_results),
+        'mongo_time': mongo_time,
+        'mongo_count': len(mongo_results)
+    }
 
 
 def search_movies_advanced(title=None, min_rating=None, max_rating=None, min_votes=None):
@@ -411,7 +556,7 @@ class MovieApp(tk.Tk):
         super().__init__()
 
         # Window config
-        self.title("Movie Database Management System - CRUD + Analytics")
+        self.title("Movie Database Management System")
         self.geometry("1400x850")
         self.resizable(True, True)
         self.configure(bg='#f0f0f0')
@@ -437,7 +582,7 @@ class MovieApp(tk.Tk):
         title_label = tk.Label(header, text="TMDB Movie Database", 
                               font=('Arial', 18, 'bold'), bg='#2c3e50', fg='white')
         title_label.pack(pady=8)
-
+        
         # Create tabbed notebook
         self.notebook = ttk.Notebook(self)
         self.notebook.pack(fill='both', expand=True, padx=10, pady=10)
@@ -446,15 +591,18 @@ class MovieApp(tk.Tk):
         self.movies_tab = ttk.Frame(self.notebook)
         self.users_tab = ttk.Frame(self.notebook)
         self.analytics_tab = ttk.Frame(self.notebook)
+        self.nosql_tab = ttk.Frame(self.notebook)
         
         self.notebook.add(self.movies_tab, text='  Movies & Search  ')
         self.notebook.add(self.users_tab, text='  Users & Ratings  ')
         self.notebook.add(self.analytics_tab, text='  Analytics & Stats  ')
+        self.notebook.add(self.nosql_tab, text='  Genre & Keywords  ')
         
         # Build each tab
         self.build_movies_tab()
         self.build_users_tab()
         self.build_analytics_tab()
+        self.build_nosql_tab()
 
     ###########################################################################
     # TAB 1: MOVIES & SEARCH
@@ -537,14 +685,14 @@ class MovieApp(tk.Tk):
         scrollbar.pack(side='right', fill='y')
         self.tree.configure(yscrollcommand=scrollbar.set)
         
-        # Movie details
+        # Movie details - Increased height for MongoDB data
         ttk.Button(results_wrapper, text="View Details", 
                   command=self.handle_view_details).pack(anchor='w', pady=(5, 3))
         
-        self.details_text = tk.Text(results_wrapper, width=100, height=5, state="disabled",
+        self.details_text = tk.Text(results_wrapper, width=100, height=12, state="disabled",
                                    wrap="word", borderwidth=2, relief="groove",
                                    font=('Arial', 9), bg='#ecf0f1', fg='#2c3e50')
-        self.details_text.pack(fill='x')
+        self.details_text.pack(fill='both', expand=True)
 
     ###########################################################################
     # TAB 2: USERS & RATINGS
@@ -693,6 +841,138 @@ class MovieApp(tk.Tk):
         self.stats_text.pack(fill='x', pady=(5, 0))
 
     ###########################################################################
+    # TAB 4: NoSQL FEATURES
+    ###########################################################################
+    
+    def build_nosql_tab(self):
+        """Build the NoSQL Features tab - MongoDB operations."""
+        container = tk.Frame(self.nosql_tab, bg='#f0f0f0')
+        container.pack(fill='both', expand=True, padx=10, pady=10)
+        
+        # Left side: Search & Operations
+        left_container = tk.Frame(container, bg='#f0f0f0')
+        left_container.pack(side='left', fill='both', expand=True, padx=(0, 5))
+        
+        # Genre Search Section - FIXED HEIGHT
+        genre_wrapper = ttk.LabelFrame(left_container, text="Search by Genre", padding=10)
+        genre_wrapper.pack(fill='x', pady=(0, 10))
+        genre_wrapper.pack_propagate(False)
+        genre_wrapper.configure(height=120)
+        
+        genre_form = tk.Frame(genre_wrapper, bg='white')
+        genre_form.pack(fill='x')
+        
+        ttk.Label(genre_form, text="Genre:").grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        self.genre_var = tk.StringVar()
+        genre_entry = ttk.Entry(genre_form, textvariable=self.genre_var, width=30)
+        genre_entry.grid(row=0, column=1, padx=5, pady=5)
+        
+        ttk.Button(genre_form, text="Search Genre", 
+                  command=self.handle_genre_search).grid(row=0, column=2, padx=5, pady=5)
+        
+        ttk.Label(genre_form, text="Examples: Action, Drama, Sci-Fi, Horror", 
+                 font=('Arial', 8, 'italic')).grid(row=1, column=0, columnspan=3, pady=(0, 5))
+        
+        self.genre_exec_label = tk.Label(genre_wrapper, text="", font=('Arial', 8), 
+                                         bg='white', fg='#e67e22')
+        self.genre_exec_label.pack(anchor='e')
+        
+        # Keyword Search Section - FIXED HEIGHT
+        keyword_wrapper = ttk.LabelFrame(left_container, text="Search by Keywords/Tags", padding=10)
+        keyword_wrapper.pack(fill='x', pady=(0, 10))
+        keyword_wrapper.pack_propagate(False)
+        keyword_wrapper.configure(height=120)
+        
+        keyword_form = tk.Frame(keyword_wrapper, bg='white')
+        keyword_form.pack(fill='x')
+        
+        ttk.Label(keyword_form, text="Keyword:").grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        self.keyword_var = tk.StringVar()
+        keyword_entry = ttk.Entry(keyword_form, textvariable=self.keyword_var, width=30)
+        keyword_entry.grid(row=0, column=1, padx=5, pady=5)
+        
+        ttk.Button(keyword_form, text="Search Keyword", 
+                  command=self.handle_keyword_search).grid(row=0, column=2, padx=5, pady=5)
+        
+        ttk.Label(keyword_form, text="Examples: heist, space, revenge, detective", 
+                 font=('Arial', 8, 'italic')).grid(row=1, column=0, columnspan=3, pady=(0, 5))
+        
+        self.keyword_exec_label = tk.Label(keyword_wrapper, text="", font=('Arial', 8), 
+                                           bg='white', fg='#e67e22')
+        self.keyword_exec_label.pack(anchor='e')
+        
+        # Results Section - Expandable
+        results_wrapper = ttk.LabelFrame(left_container, text="Query Results", padding=10)
+        results_wrapper.pack(fill='both', expand=True)
+        
+        tree_frame = tk.Frame(results_wrapper, bg='white')
+        tree_frame.pack(fill='both', expand=True)
+        
+        columns = ("tmdbId", "title", "genres", "rating")
+        self.nosql_tree = ttk.Treeview(tree_frame, columns=columns, show="headings", height=10)
+        
+        self.nosql_tree.heading("tmdbId", text="TMDB ID")
+        self.nosql_tree.heading("title", text="Title")
+        self.nosql_tree.heading("genres", text="Genres")
+        self.nosql_tree.heading("rating", text="Rating")
+        
+        self.nosql_tree.column("tmdbId", width=80, anchor="center")
+        self.nosql_tree.column("title", width=300, anchor="w")
+        self.nosql_tree.column("genres", width=200, anchor="w")
+        self.nosql_tree.column("rating", width=80, anchor="center")
+        
+        self.nosql_tree.pack(side='left', fill='both', expand=True)
+        
+        nosql_scrollbar = ttk.Scrollbar(tree_frame, orient=tk.VERTICAL, command=self.nosql_tree.yview)
+        nosql_scrollbar.pack(side='right', fill='y')
+        self.nosql_tree.configure(yscrollcommand=nosql_scrollbar.set)
+        
+        # Right side: Analytics
+        right_container = tk.Frame(container, bg='#f0f0f0')
+        right_container.pack(side='right', fill='both', expand=True, padx=(5, 0))
+        
+        # Genre Statistics - FIXED HEIGHT
+        genre_stats_wrapper = ttk.LabelFrame(right_container, text="Genre Statistics", padding=10)
+        genre_stats_wrapper.pack(fill='x', pady=(0, 10))
+        genre_stats_wrapper.pack_propagate(False)
+        genre_stats_wrapper.configure(height=100)
+        
+        ttk.Button(genre_stats_wrapper, text="Get Genre Statistics", 
+                  command=self.handle_genre_stats).pack(anchor='w', pady=(0, 5))
+        
+        self.genre_stats_exec_label = tk.Label(genre_stats_wrapper, text="", font=('Arial', 8), 
+                                               bg='white', fg='#9b59b6')
+        self.genre_stats_exec_label.pack(anchor='e')
+        
+        # Genre Stats Results - Expandable
+        genre_stats_results = ttk.LabelFrame(right_container, text="Top Genres by Count", padding=10)
+        genre_stats_results.pack(fill='both', expand=True)
+        
+        stats_tree_frame = tk.Frame(genre_stats_results, bg='white')
+        stats_tree_frame.pack(fill='both', expand=True)
+        
+        stats_columns = ("genre", "count", "avg_rating", "avg_revenue")
+        self.genre_stats_tree = ttk.Treeview(stats_tree_frame, columns=stats_columns, 
+                                             show="headings", height=10)
+        
+        self.genre_stats_tree.heading("genre", text="Genre(s)")
+        self.genre_stats_tree.heading("count", text="Count")
+        self.genre_stats_tree.heading("avg_rating", text="Avg Rating")
+        self.genre_stats_tree.heading("avg_revenue", text="Avg Revenue")
+        
+        self.genre_stats_tree.column("genre", width=200, anchor="w")
+        self.genre_stats_tree.column("count", width=80, anchor="center")
+        self.genre_stats_tree.column("avg_rating", width=100, anchor="center")
+        self.genre_stats_tree.column("avg_revenue", width=120, anchor="e")
+        
+        self.genre_stats_tree.pack(side='left', fill='both', expand=True)
+        
+        stats_scrollbar = ttk.Scrollbar(stats_tree_frame, orient=tk.VERTICAL, 
+                                        command=self.genre_stats_tree.yview)
+        stats_scrollbar.pack(side='right', fill='y')
+        self.genre_stats_tree.configure(yscrollcommand=stats_scrollbar.set)
+
+    ###########################################################################
     # EVENT HANDLERS - MOVIES
     ###########################################################################
     
@@ -753,7 +1033,7 @@ class MovieApp(tk.Tk):
             ))
     
     def handle_view_details(self):
-        """View selected movie details."""
+        """View selected movie details - combines MariaDB + MongoDB data."""
         selected = self.tree.focus()
         if not selected:
             messagebox.showwarning("Select a movie", "Click a movie row first.")
@@ -762,16 +1042,58 @@ class MovieApp(tk.Tk):
         values = self.tree.item(selected, "values")
         movie_id = values[0]
         
+        # Get MariaDB data (SQL)
         info = get_movie_details(movie_id)
         if not info:
             messagebox.showerror("Error", "Movie not found in database.")
             return
         
+        # Build SQL portion
         details_str = (
+            f"=== MariaDB (SQL) Data ===\n"
             f"Movie ID: {info['movieId']} | Title: {info['title']}\n"
-            f"Release Date: {info['release_date']} | Votes: {info['vote_count']}\n"
-            f"Average Rating: {info['avg_rating']} | IMDb: {info['imdbId']} | TMDB: {info['tmdbId']}\n"
+            f"Release Date: {info['release_date']} | User Votes: {info['vote_count']}\n"
+            f"Average User Rating: {info['avg_rating']}\n"
+            f"IMDb ID: {info['imdbId']} | TMDB ID: {info['tmdbId']}\n"
         )
+        
+        # Get MongoDB data (NoSQL) if tmdbId exists
+        tmdb_meta = None
+        if info.get('tmdbId'):
+            tmdb_meta = get_tmdb_metadata(info['tmdbId'])
+        
+        if tmdb_meta:
+            # Format genres properly (handle both string and list)
+            genres = tmdb_meta.get('genres', 'N/A')
+            if isinstance(genres, list):
+                genres_str = ', '.join(genres)
+            elif isinstance(genres, str):
+                genres_str = genres  # Already a string, don't split it
+            else:
+                genres_str = 'N/A'
+            
+            details_str += (
+                f"\n=== MongoDB (NoSQL) Data ===\n"
+                f"TMDB Title: {tmdb_meta.get('title', 'N/A')}\n"
+                f"Genres: {genres_str}\n"
+                f"TMDB Vote Average: {tmdb_meta.get('vote_average', 'N/A')} "
+                f"(Count: {tmdb_meta.get('vote_count', 'N/A')})\n"
+                f"Runtime: {tmdb_meta.get('runtime', 'N/A')} min | "
+                f"Revenue: ${tmdb_meta.get('revenue', 0):,}\n"
+                f"Language: {tmdb_meta.get('original_language', 'N/A')} | "
+                f"Popularity: {tmdb_meta.get('popularity', 'N/A')}\n"
+                f"Tagline: {tmdb_meta.get('tagline', 'N/A')}\n"
+                f"\nOverview: {tmdb_meta.get('overview', 'N/A')}\n"
+            )
+            
+            # Add Similar Movies section
+            similar_movies, sim_time = find_similar_movies_mongo(info['tmdbId'])
+            if similar_movies:
+                details_str += f"\n=== Similar Movies (MongoDB Query: {sim_time:.4f}s) ===\n"
+                for i, movie in enumerate(similar_movies[:5], 1):
+                    details_str += f"{i}. {movie.get('title', 'N/A')} (Rating: {movie.get('vote_average', 'N/A')})\n"
+        else:
+            details_str += f"\n=== MongoDB (NoSQL) Data ===\n(No TMDB metadata found for this movie)\n"
         
         self.details_text.config(state="normal")
         self.details_text.delete("1.0", tk.END)
@@ -1045,6 +1367,85 @@ class MovieApp(tk.Tk):
             self.stats_text.insert(tk.END, stats)
         
         self.stats_text.config(state="disabled")
+
+    ###########################################################################
+    # EVENT HANDLERS - NoSQL
+    ###########################################################################
+    
+    def handle_genre_search(self):
+        """Search movies by genre in MongoDB."""
+        genre = self.genre_var.get().strip()
+        
+        # Clear previous results
+        for item in self.nosql_tree.get_children():
+            self.nosql_tree.delete(item)
+        
+        if not genre:
+            messagebox.showinfo("Info", "Please enter a genre to search.")
+            return
+        
+        results, exec_time = search_movies_by_genre_mongo(genre)
+        self.genre_exec_label.config(text=f"⚡ MongoDB query: {exec_time:.4f}s | Results: {len(results)}")
+        
+        if not results:
+            messagebox.showinfo("No Results", f"No movies found with genre '{genre}'")
+            return
+        
+        for movie in results:
+            self.nosql_tree.insert('', 'end', values=(
+                movie.get('tmdbId', 'N/A'),
+                movie.get('title', 'N/A'),
+                movie.get('genres', 'N/A'),
+                movie.get('vote_average', 'N/A')
+            ))
+    
+    def handle_keyword_search(self):
+        """Search movies by keyword in overview."""
+        keyword = self.keyword_var.get().strip()
+        
+        # Clear previous results
+        for item in self.nosql_tree.get_children():
+            self.nosql_tree.delete(item)
+        
+        if not keyword:
+            messagebox.showinfo("Info", "Please enter a keyword to search.")
+            return
+        
+        results, exec_time = search_movies_by_keyword_mongo(keyword)
+        self.keyword_exec_label.config(text=f"⚡ MongoDB query: {exec_time:.4f}s | Results: {len(results)}")
+        
+        if not results:
+            messagebox.showinfo("No Results", f"No movies found with keyword '{keyword}'")
+            return
+        
+        for movie in results:
+            self.nosql_tree.insert('', 'end', values=(
+                movie.get('tmdbId', 'N/A'),
+                movie.get('title', 'N/A'),
+                movie.get('genres', 'N/A'),
+                movie.get('vote_average', 'N/A')
+            ))
+    
+    def handle_genre_stats(self):
+        """Get genre statistics using MongoDB aggregation."""
+        # Clear previous results
+        for item in self.genre_stats_tree.get_children():
+            self.genre_stats_tree.delete(item)
+        
+        results, exec_time = get_genre_statistics_mongo()
+        self.genre_stats_exec_label.config(text=f"⚡ Aggregation pipeline: {exec_time:.4f}s")
+        
+        if not results:
+            messagebox.showinfo("No Results", "No genre statistics available")
+            return
+        
+        for stat in results:
+            self.genre_stats_tree.insert('', 'end', values=(
+                stat.get('_id', 'N/A'),
+                stat.get('count', 0),
+                f"{stat.get('avg_rating', 0):.2f}" if stat.get('avg_rating') else 'N/A',
+                f"${stat.get('avg_revenue', 0):,.0f}" if stat.get('avg_revenue') else '$0'
+            ))
 
 
 ###############################################################################
