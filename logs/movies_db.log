@@ -1,0 +1,42 @@
+2025-11-06 12:42:16,450 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-06 12:42:16,451 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-06 12:42:23,203 - ERROR - Password verification error: Invalid salt
+2025-11-06 12:42:29,812 - ERROR - Password verification error: Invalid salt
+2025-11-06 12:42:49,994 - ERROR - Password verification error: Invalid salt
+2025-11-06 12:46:29,632 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-06 12:46:29,633 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-06 12:46:45,811 - INFO - User 676 added movie 603 to watchlist
+2025-11-06 12:48:56,156 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-06 12:48:56,156 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-06 12:49:50,269 - INFO - User 676 added movie 605 to watchlist
+2025-11-06 12:51:04,069 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-06 12:51:04,069 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-06 12:52:30,464 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-06 12:52:30,464 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-06 12:57:06,875 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-06 12:57:06,875 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-06 17:39:19,166 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-06 17:39:19,168 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-06 17:42:20,497 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-06 17:42:20,498 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-06 17:45:21,501 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-06 17:45:21,504 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-06 17:45:36,856 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-06 17:45:36,856 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-06 18:27:39,067 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-06 18:27:39,068 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-06 23:13:12,968 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-06 23:13:12,969 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-07 00:03:41,469 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-07 00:03:41,469 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-07 00:07:23,381 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-07 00:07:23,382 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-07 00:25:15,179 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-07 00:25:15,179 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-07 00:25:42,639 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-07 00:25:42,640 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-07 00:30:48,312 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-07 00:30:48,313 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-07 12:33:28,586 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-07 12:33:28,586 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-07 12:33:42,970 - INFO - User 676 added movie 2764 to watchlist
