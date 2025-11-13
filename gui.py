@@ -2744,8 +2744,8 @@ class MovieSelectionDialog(tk.Toplevel):
         if locked_by:
             messagebox.showerror(
                 "Rating Locked - Concurrent Edit Prevention",
-                f"This rating is currently being edited by '{locked_by}'.\n\n"
-                f"• User '{locked_by}' is editing this rating\n"
+                f"This rating is currently being edited by another user.\n\n"
+                f"• Another user is editing this rating\n"
                 f"• You CANNOT edit/delete until they finish\n"
                 f"• This demonstrates concurrent edit prevention\n"
                 f"• Lock auto-expires in 5 minutes\n\n"
@@ -3711,8 +3711,8 @@ class MovieApp(tk.Tk):
         if locked_by and locked_by != self.username:
             messagebox.showerror(
                 "Rating Locked - Concurrent Edit Prevention",
-                f"This rating is currently being edited by '{locked_by}'.\n\n"
-                f"• User '{locked_by}' is currently editing this rating\n"
+                f"This rating is currently being edited by another user.\n\n"
+                f"• Another user is currently editing this rating\n"
                 f"• You CANNOT edit/delete until they finish\n"
                 f"• This demonstrates concurrent edit prevention\n"
                 f"• Lock will auto-expire in 5 minutes\n\n"
@@ -5789,8 +5789,8 @@ class MovieApp(tk.Tk):
         if locked_by and locked_by != CURRENT_USER["username"]:
             messagebox.showerror(
                 "Rating Locked - Concurrent Edit Prevention",
-                f"This rating is currently being edited by '{locked_by}'.\n\n"
-                f"• User '{locked_by}' is currently editing this rating\n"
+                f"This rating is currently being edited by another user.\n\n"
+                f"• Another user is currently editing this rating\n"
                 f"• You CANNOT edit/delete it until they finish\n"
                 f"• This demonstrates concurrent edit prevention\n"
                 f"• Lock will auto-expire in 5 minutes if not released\n\n"
@@ -6141,8 +6141,8 @@ class MovieApp(tk.Tk):
         if locked_by and locked_by != CURRENT_USER["username"]:
             messagebox.showerror(
                 "Rating Locked - Concurrent Edit Prevention",
-                f"This rating is currently being edited by '{locked_by}'.\n\n"
-                f"• User '{locked_by}' is editing this rating\n"
+                f"This rating is currently being edited by another user.\n\n"
+                f"• Another user is editing this rating\n"
                 f"• You cannot update it until they finish\n"
                 f"• Lock will expire in 5 minutes if not released\n\n"
                 f"Please wait and try again later."
