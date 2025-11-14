@@ -1534,16 +1534,53 @@ def update_user(user_id, username, email, password=None):
 
 
 def delete_user(user_id):
-    sql = "DELETE FROM users WHERE userId = %s"
+    """
+    Delete a user while preserving their ratings.
+    Sets userId to NULL in ratings table to maintain rating data for averages.
+    This ensures that movie averages and vote counts remain accurate even after user deletion.
+    """
     conn = get_connection()
     try:
         with conn.cursor() as cur:
-            cur.execute(sql, (user_id,))
+            # First, set userId to NULL in ratings (preserves rating data)
+            cur.execute(
+                "UPDATE ratings SET userId = NULL WHERE userId = %s",
+                (user_id,)
+            )
+            logger.info(f"Set userId to NULL for user {user_id}'s ratings (preserving data)")
+            
+            # Delete from watchlist (CASCADE DELETE is OK here)
+            try:
+                cur.execute(
+                    "DELETE FROM WATCHLIST WHERE userId = %s",
+                    (user_id,)
+                )
+                logger.info(f"Deleted watchlist entries for user {user_id}")
+            except pymysql.err.ProgrammingError:
+                # Watchlist table might not exist
+                pass
+            
+            # Delete from rating_locks (CASCADE DELETE is OK here)
+            try:
+                cur.execute(
+                    "DELETE FROM RATING_LOCKS WHERE userId = %s",
+                    (user_id,)
+                )
+                logger.info(f"Deleted rating locks for user {user_id}")
+            except pymysql.err.ProgrammingError:
+                # Rating_locks table might not exist
+                pass
+            
+            # Finally, delete the user
+            cur.execute("DELETE FROM users WHERE userId = %s", (user_id,))
+            logger.info(f"Deleted user {user_id} (ratings preserved with NULL userId)")
+            
         conn.commit()
         return True
     except pymysql.MySQLError as e:
         conn.rollback()
         messagebox.showerror("DB Error (Delete User)", str(e))
+        logger.error(f"Failed to delete user {user_id}: {e}")
         return False
     finally:
         conn.close()
@@ -2774,12 +2811,18 @@ class MovieSelectionDialog(tk.Toplevel):
         
         logger.info(f"[POPUP 2] ✅ Lock ACQUIRED: userId={self.user_id}, movieId={movie_id}")
         
+        # Get movie details for display
+        movie_details = get_movie_details(movie_id)
+        vote_count = movie_details.get('vote_count', 0) if movie_details else 0
+        avg_rating = movie_details.get('avg_rating', 'N/A') if movie_details else 'N/A'
+        
         # Show success
         messagebox.showinfo(
             "Lock Acquired - Transaction Started",
             f"Rating locked successfully!\n\n"
             f"Movie: {movie_title}\n"
-            f"Movie ID: {movie_id}\n\n"
+            f"Movie ID: {movie_id}\n"
+            f"Votes: {vote_count} | Avg Rating: {avg_rating}\n\n"
             f"- You now have exclusive edit access\n"
             f"- Other users are BLOCKED from editing\n"
             f"- Transaction has begun\n"
@@ -2825,6 +2868,11 @@ class RatingEntryDialog(tk.Toplevel):
         self.rating_value = None
         self.success = False
         
+        # Get movie details
+        movie_details = get_movie_details(movie_id)
+        self.vote_count = movie_details.get('vote_count', 0) if movie_details else 0
+        self.avg_rating = movie_details.get('avg_rating', 'N/A') if movie_details else 'N/A'
+        
         # Modal setup
         self.transient(parent)
         self.grab_set()
@@ -2861,7 +2909,7 @@ class RatingEntryDialog(tk.Toplevel):
         
         tk.Label(
             self,
-            text=f"Movie ID: {self.movie_id}",
+            text=f"Movie ID: {self.movie_id} | Votes: {self.vote_count} | Avg: {self.avg_rating}",
             font=("Arial", 9),
             bg="#2c3e50",
             fg="#bdc3c7"
