@@ -1,0 +1,28 @@
+# ============================================================
+# MariaDB Custom Configuration
+# ============================================================
+# Performance and charset settings for the movie database
+# ============================================================
+
+[mysqld]
+# Character set configuration
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+
+# Performance settings
+max_connections = 200
+innodb_buffer_pool_size = 256M
+innodb_log_file_size = 64M
+
+# Query cache (useful for read-heavy workloads)
+query_cache_type = 1
+query_cache_size = 32M
+
+# Logging
+general_log = 0
+slow_query_log = 1
+slow_query_log_file = /var/log/mysql/slow.log
+long_query_time = 2
+
+[client]
+default-character-set = utf8mb4

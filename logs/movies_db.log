@@ -1006,3 +1006,28 @@
 2025-11-14 19:42:13,921 - INFO - [MAIN] POPUP 2 Result: movie_id=201, lock=True
 2025-11-14 19:42:13,922 - INFO - [MAIN] POPUP 3: Rating Entry for movieId=201
 2025-11-14 19:42:13,971 - INFO - [POPUP 3] Rating Entry Dialog opened for keetian, movieId=201
+2025-11-28 00:36:23,720 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-28 00:36:23,720 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-27 16:58:03,334 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-27 16:58:03,336 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-27 16:58:05,857 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-27 16:58:05,863 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-27 16:58:07,972 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-27 16:58:07,974 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-27 16:58:09,962 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-27 16:58:09,964 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-27 16:58:12,601 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-27 16:58:12,603 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-27 16:58:16,000 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-27 16:58:16,002 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-27 16:58:20,714 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-27 16:58:20,716 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-27 16:58:28,534 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-27 16:58:28,536 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-27 16:58:43,483 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-27 16:58:43,485 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-28 01:02:27,172 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-28 01:02:27,173 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-28 01:04:29,238 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-28 01:04:29,239 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-28 01:05:00,853 - WARNING - WATCHLIST table doesn't exist: (1146, "Table 'movies_db.watchlist' doesn't exist")

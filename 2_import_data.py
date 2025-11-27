@@ -3,7 +3,7 @@ INF2003 Movie Database - Data Import Script
 Imports CSV data into MariaDB with proper data cleaning and validation
 """
 
-import mysql.connector
+import pymysql
 import csv
 import json
 import ast
@@ -14,12 +14,15 @@ import sys
 # ============================================================
 # Configuration
 # ============================================================
+import os
+
 DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'root',  # Your MariaDB username
-    'password': '12345',           # Enter your password here (leave empty if none)
-    'database': 'movies_db',
-    'charset': 'utf8mb4'
+    'host': os.getenv('DB_HOST', 'localhost'),
+    'user': os.getenv('DB_USER', 'root'),
+    'password': os.getenv('DB_PASS', '12345'),
+    'database': os.getenv('DB_NAME', 'movies_db'),
+    'charset': 'utf8mb4',
+    'cursorclass': pymysql.cursors.DictCursor
 }
 
 # File paths (adjust if needed)
@@ -37,10 +40,10 @@ FILES = {
 def connect_db():
     """Connect to MariaDB database"""
     try:
-        conn = mysql.connector.connect(**DB_CONFIG)
+        conn = pymysql.connect(**DB_CONFIG)
         print(f"✅ Connected to MariaDB database: {DB_CONFIG['database']}")
         return conn
-    except mysql.connector.Error as err:
+    except pymysql.Error as err:
         print(f"❌ Error connecting to database: {err}")
         sys.exit(1)
 
@@ -258,7 +261,7 @@ def load_staging_to_final(conn):
         cursor.callproc('load_from_staging')
         conn.commit()
         print("✅ Data successfully loaded into final tables")
-    except mysql.connector.Error as err:
+    except pymysql.Error as err:
         print(f"❌ Error loading staging data: {err}")
         conn.rollback()
     finally:

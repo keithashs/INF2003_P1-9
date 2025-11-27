@@ -1,0 +1,120 @@
+# ============================================================
+# Docker Compose Configuration for TMDB Movie Database
+# ============================================================
+# This orchestrates both MariaDB and the Python application
+# containers, with automatic setup and initialization.
+# ============================================================
+
+services:
+  # ============================================================
+  # MariaDB Database Service
+  # ============================================================
+  mariadb:
+    image: mariadb:10.11
+    container_name: movies_mariadb
+    restart: unless-stopped
+    
+    # Environment variables for MariaDB initialization
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: movies_db
+      MYSQL_USER: movies_user
+      MYSQL_PASSWORD: movies_password
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    
+    # Mount volumes for persistent data and initialization scripts
+    volumes:
+      # Persistent database storage
+      - mariadb_data:/var/lib/mysql
+      
+      # Initialization script (runs on first startup)
+      - ./1_create_schema.sql:/docker-entrypoint-initdb.d/01_create_schema.sql
+      
+      # Configuration file (optional) - commented out to avoid permission issues
+      # - ./docker/mariadb.cnf:/etc/mysql/conf.d/custom.cnf
+    
+    # Expose MariaDB port (default: 3306)
+    ports:
+      - "3306:3306"
+    
+    # Health check to ensure database is ready
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    
+    # Network configuration
+    networks:
+      - movies_network
+
+  # ============================================================
+  # Python Application Service (GUI + Data Import)
+  # ============================================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: movies_app
+    restart: unless-stopped
+    
+    # Wait for MariaDB to be healthy before starting
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    
+    # Environment variables (override defaults from Dockerfile)
+    environment:
+      # MariaDB connection settings
+      DB_HOST: mariadb
+      DB_USER: root
+      DB_PASS: root_password
+      DB_NAME: movies_db
+      
+      # MongoDB Atlas connection (cloud-based)
+      MONGO_USERNAME: nkt12385_db_user
+      MONGO_PASSWORD: Keetian12345
+      MONGO_CLUSTER: cluster0.qrc4kkf.mongodb.net
+      MONGO_DB: movies_nosql
+      MONGO_COLL: tmdb_movies
+      
+      # X11 display for GUI (Linux/Mac only)
+      DISPLAY: ${DISPLAY:-:0}
+    
+    # Mount volumes for application code and data
+    volumes:
+      # Application code (for development)
+      - .:/app
+      
+      # Persistent logs
+      - ./logs:/app/logs
+      
+      # X11 socket for GUI (Linux/Mac only)
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    
+    # Network configuration
+    networks:
+      - movies_network
+    
+    # Keep container running (for manual execution)
+    # Remove this line to run gui.py automatically
+    stdin_open: true
+    tty: true
+
+# ============================================================
+# Volumes (Persistent Storage)
+# ============================================================
+volumes:
+  mariadb_data:
+    driver: local
+    name: movies_mariadb_data
+
+# ============================================================
+# Networks
+# ============================================================
+networks:
+  movies_network:
+    driver: bridge
+    name: movies_network

@@ -43,13 +43,13 @@ CREATE TABLE MOVIES (
 -- This maintains accurate movie averages and vote counts
 -- ============================================================
 CREATE TABLE RATINGS (
-    userId INT NULL,
+    userId INT NOT NULL,
     movieId INT NOT NULL,
     rating DECIMAL(2,1) NOT NULL,
     timestamp BIGINT NOT NULL,
-    PRIMARY KEY (movieId, timestamp, userId),
+    PRIMARY KEY (userId, movieId),
     FOREIGN KEY (userId) REFERENCES USERS(userId) 
-        ON DELETE SET NULL 
+        ON DELETE CASCADE 
         ON UPDATE CASCADE,
     FOREIGN KEY (movieId) REFERENCES MOVIES(movieId) 
         ON DELETE CASCADE 
@@ -57,7 +57,6 @@ CREATE TABLE RATINGS (
     INDEX idx_rating (rating),
     INDEX idx_timestamp (timestamp),
     INDEX idx_movieId_rating (movieId, rating),
-    INDEX idx_userId (userId),
     CONSTRAINT chk_rating CHECK (rating >= 0.5 AND rating <= 5.0)
 ) ENGINE=InnoDB;
 
