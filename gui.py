@@ -46,9 +46,9 @@ logger = logging.getLogger(__name__)
 
 # Load credentials from environment variables for security
 # Set these in your system environment or use a .env file
-DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_HOST = os.getenv("DB_HOST", "192.168.1.98")  # Change localhost to Person A's IP
 DB_USER = os.getenv("DB_USER", "root")
-DB_PASS = os.getenv("DB_PASS", "123456")  # Default for development only
+DB_PASS = os.getenv("DB_PASS", "root_password")  # Match docker-compose.yml
 DB_NAME = os.getenv("DB_NAME", "movies_db")
 
 # MongoDB Atlas Connection Settings

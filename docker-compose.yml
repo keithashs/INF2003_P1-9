@@ -17,7 +17,7 @@ services:
       - mariadb_data:/var/lib/mysql
       - ./1_create_schema.sql:/docker-entrypoint-initdb.d/01_create_schema.sql
     ports:
-      - "0.0.0.0:3306:3306"  # Added 0.0.0.0 for external access
+      - "0.0.0.0:3307:3306"  # Bind to all interfaces for remote access
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 10s
@@ -54,9 +54,6 @@ services:
       - .:/app
       - ./logs:/app/logs
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-    # ADD THIS SECTION - Expose your application port
-    ports:
-      - "0.0.0.0:5000:5000"  # Replace 5000 with your actual app port
     networks:
       - movies_network
     stdin_open: true
