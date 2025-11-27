@@ -50,6 +50,7 @@ DB_HOST = os.getenv("DB_HOST", "192.168.1.98")  # Change localhost to Person A's
 DB_USER = os.getenv("DB_USER", "root")
 DB_PASS = os.getenv("DB_PASS", "root_password")  # Match docker-compose.yml
 DB_NAME = os.getenv("DB_NAME", "movies_db")
+DB_PORT = int(os.getenv("DB_PORT", "3307"))  # Docker mapped port
 
 # MongoDB Atlas Connection Settings
 # Load from environment variables for security
@@ -89,6 +90,7 @@ def get_connection():
     """Open a MariaDB connection using DictCursor."""
     return pymysql.connect(
         host=DB_HOST,
+        port=DB_PORT,
         user=DB_USER,
         password=DB_PASS,
         database=DB_NAME,
