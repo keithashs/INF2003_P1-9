@@ -22,6 +22,9 @@ CREATE TABLE IF NOT EXISTS RATING_LOCKS (
     FOREIGN KEY (movieId) REFERENCES MOVIES(movieId) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- Disable safe update mode to allow updates without key column in WHERE clause
+SET SQL_SAFE_UPDATES = 0;
+
 -- Set default passwords for existing users (password: "password123")
 -- Hash: ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f
 UPDATE USERS 
@@ -44,6 +47,9 @@ SET password_hash = 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d447
     username = 'testuser',
     email = 'test@moviedb.com'
 WHERE userId = 2;
+
+-- Re-enable safe update mode
+SET SQL_SAFE_UPDATES = 1;
 
 -- Show summary
 SELECT 'Security features added successfully' AS Status;

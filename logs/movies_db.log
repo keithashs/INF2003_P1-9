@@ -1199,3 +1199,12 @@
 2025-11-29 02:20:08,783 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
 2025-11-29 02:20:11,903 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
 2025-11-29 02:20:11,904 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-29 02:23:12,214 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 02:23:14,104 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 02:23:14,104 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-29 02:23:46,297 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 02:23:48,146 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 02:23:48,146 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-29 02:38:42,969 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 02:38:45,076 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 02:38:45,077 - INFO - Using database: movies_nosql, collection: tmdb_movies

@@ -4,7 +4,7 @@
 
 | Role  | Username | Password    |
 |-------|----------|-------------|
-| User  | test     | test123     |
+| User  | testuser | password123 |
 | Admin | admin    | password123 |
 
 ## Database Connections

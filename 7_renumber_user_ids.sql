@@ -5,6 +5,9 @@
 
 USE movies_db;
 
+-- Disable safe update mode
+SET SQL_SAFE_UPDATES = 0;
+
 -- Step 1: Create a temporary mapping table
 DROP TABLE IF EXISTS user_id_mapping;
 CREATE TEMPORARY TABLE user_id_mapping (
@@ -230,3 +233,6 @@ SELECT '============================================' as info;
 SELECT 'TRANSFER COMPLETE!' as info;
 SELECT 'Admin account now has 0 ratings.' as info;
 SELECT '============================================' as info;
+
+-- Re-enable safe update mode
+SET SQL_SAFE_UPDATES = 1;
