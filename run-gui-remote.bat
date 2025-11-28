@@ -11,7 +11,7 @@ echo.
 REM ============================================================
 REM EDIT THIS: Set the IP address of the computer running MariaDB
 REM ============================================================
-set DB_HOST=172.22.32.1
+set DB_HOST=192.168.1.98
 set DB_USER=root
 set DB_PASS=123456
 set DB_NAME=movies_db
