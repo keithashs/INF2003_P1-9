@@ -51,30 +51,68 @@ DB_USER = os.getenv("DB_USER", "root")
 DB_PASS = os.getenv("DB_PASS", "123456")  # Default for development only
 DB_NAME = os.getenv("DB_NAME", "movies_db")
 
-# MongoDB Atlas Connection Settings
-# Load from environment variables for security
+# MongoDB Connection Settings
+# Supports both LOCAL Docker MongoDB and MongoDB Atlas (cloud)
+# Set USE_LOCAL_MONGO=true to use local Docker MongoDB
+USE_LOCAL_MONGO = os.getenv("USE_LOCAL_MONGO", "false").lower() == "true"
+
+# Local MongoDB (Docker) Settings
+MONGO_HOST = os.getenv("MONGO_HOST", "localhost")
+MONGO_PORT = os.getenv("MONGO_PORT", "27017")
+
+# MongoDB Atlas Connection Settings (cloud)
 MONGO_USERNAME = os.getenv("MONGO_USERNAME", "nkt12385_db_user")  # Default for development
 MONGO_PASSWORD = os.getenv("MONGO_PASSWORD", "Keetian12345")  # Default for development
 MONGO_CLUSTER = os.getenv("MONGO_CLUSTER", "cluster0.qrc4kkf.mongodb.net")
+
+# Common MongoDB Settings
 MONGO_DB = os.getenv("MONGO_DB", "movies_nosql")
 MONGO_COLL = os.getenv("MONGO_COLL", "tmdb_movies")
 
-# MongoDB Atlas connection string (kept global for reuse)
-# Format: mongodb+srv://<username>:<password>@<cluster>/?retryWrites=true&w=majority
-try:
-    # Connection string WITHOUT database in URL (database selected separately)
-    mongo_connection_string = f"mongodb+srv://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_CLUSTER}/?retryWrites=true&w=majority"
-    mongo_client = MongoClient(mongo_connection_string)
-    mongo_db = mongo_client[MONGO_DB]
-    tmdb_collection = mongo_db[MONGO_COLL]
-    logger.info(f"Successfully connected to MongoDB Atlas: {MONGO_CLUSTER}")
-    logger.info(f"Using database: {MONGO_DB}, collection: {MONGO_COLL}")
-except Exception as e:
-    logger.error(f"MongoDB Atlas connection failed: {e}")
-    messagebox.showwarning("Database Warning", "MongoDB Atlas connection failed.\nSome features may be unavailable.")
-    mongo_client = None
-    mongo_db = None
-    tmdb_collection = None
+# MongoDB connection - supports both local Docker and Atlas
+def get_mongo_connection():
+    """
+    Establish MongoDB connection.
+    Uses local Docker MongoDB if USE_LOCAL_MONGO=true, otherwise MongoDB Atlas.
+    Returns (client, db, collection) tuple.
+    """
+    try:
+        if USE_LOCAL_MONGO:
+            # Local Docker MongoDB connection
+            # Format: mongodb://username:password@host:port/
+            local_username = os.getenv("MONGO_USERNAME", "admin")
+            local_password = os.getenv("MONGO_PASSWORD", "admin123")
+            mongo_connection_string = f"mongodb://{local_username}:{local_password}@{MONGO_HOST}:{MONGO_PORT}/?authSource=admin"
+            logger.info(f"Connecting to LOCAL MongoDB: {MONGO_HOST}:{MONGO_PORT}")
+        else:
+            # MongoDB Atlas connection (cloud)
+            # Format: mongodb+srv://<username>:<password>@<cluster>/?retryWrites=true&w=majority
+            mongo_connection_string = f"mongodb+srv://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_CLUSTER}/?retryWrites=true&w=majority"
+            logger.info(f"Connecting to MongoDB Atlas: {MONGO_CLUSTER}")
+        
+        client = MongoClient(mongo_connection_string, serverSelectionTimeoutMS=5000)
+        # Test connection
+        client.admin.command('ping')
+        db = client[MONGO_DB]
+        collection = db[MONGO_COLL]
+        
+        if USE_LOCAL_MONGO:
+            logger.info(f"Successfully connected to LOCAL MongoDB: {MONGO_HOST}:{MONGO_PORT}")
+        else:
+            logger.info(f"Successfully connected to MongoDB Atlas: {MONGO_CLUSTER}")
+        logger.info(f"Using database: {MONGO_DB}, collection: {MONGO_COLL}")
+        
+        return client, db, collection
+    except Exception as e:
+        logger.error(f"MongoDB connection failed: {e}")
+        return None, None, None
+
+# Initialize MongoDB connection
+mongo_client, mongo_db, tmdb_collection = get_mongo_connection()
+
+if mongo_client is None:
+    logger.warning("MongoDB connection failed. Some features may be unavailable.")
+    # Don't show messagebox during import - it may not be in GUI context
 
 # Global current session (after login)
 CURRENT_USER = {

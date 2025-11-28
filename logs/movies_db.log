@@ -1036,3 +1036,29 @@
 2025-11-28 15:07:57,319 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
 2025-11-28 15:07:57,320 - INFO - Using database: movies_nosql, collection: tmdb_movies
 2025-11-28 15:08:07,439 - WARNING - WATCHLIST table doesn't exist: (1146, "Table 'movies_db.watchlist' doesn't exist")
+2025-11-28 15:16:37,241 - INFO - Connecting to LOCAL MongoDB: localhost:27017
+2025-11-28 15:16:37,305 - ERROR - MongoDB connection failed: Authentication failed., full error: {'ok': 0.0, 'errmsg': 'Authentication failed.', 'code': 18, 'codeName': 'AuthenticationFailed'}
+2025-11-28 15:16:37,306 - WARNING - MongoDB connection failed. Some features may be unavailable.
+2025-11-28 15:17:34,908 - WARNING - WATCHLIST table doesn't exist: (1146, "Table 'movies_db.watchlist' doesn't exist")
+2025-11-28 15:19:44,198 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-28 15:19:46,574 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-28 15:19:46,575 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-28 15:20:00,430 - INFO - Connecting to LOCAL MongoDB: localhost:27017
+2025-11-28 15:20:00,466 - ERROR - MongoDB connection failed: Authentication failed., full error: {'ok': 0.0, 'errmsg': 'Authentication failed.', 'code': 18, 'codeName': 'AuthenticationFailed'}
+2025-11-28 15:20:00,467 - WARNING - MongoDB connection failed. Some features may be unavailable.
+2025-11-28 15:20:36,365 - WARNING - WATCHLIST table doesn't exist: (1146, "Table 'movies_db.watchlist' doesn't exist")
+2025-11-28 15:24:37,506 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-28 15:24:39,825 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-28 15:24:39,826 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-28 15:26:20,221 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-28 15:26:22,661 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-28 15:26:22,661 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-28 15:26:38,801 - WARNING - WATCHLIST table doesn't exist: (1146, "Table 'movies_db.watchlist' doesn't exist")
+2025-11-28 15:30:21,089 - INFO - Connecting to LOCAL MongoDB: localhost:27017
+2025-11-28 15:30:21,113 - ERROR - MongoDB connection failed: Authentication failed., full error: {'ok': 0.0, 'errmsg': 'Authentication failed.', 'code': 18, 'codeName': 'AuthenticationFailed'}
+2025-11-28 15:30:21,114 - WARNING - MongoDB connection failed. Some features may be unavailable.
+2025-11-28 15:30:31,684 - WARNING - WATCHLIST table doesn't exist: (1146, "Table 'movies_db.watchlist' doesn't exist")
+2025-11-28 15:31:06,476 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-28 15:31:08,581 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-28 15:31:08,582 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-28 15:31:15,329 - WARNING - WATCHLIST table doesn't exist: (1146, "Table 'movies_db.watchlist' doesn't exist")
