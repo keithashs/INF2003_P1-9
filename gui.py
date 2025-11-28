@@ -48,7 +48,7 @@ logger = logging.getLogger(__name__)
 # Set these in your system environment or use a .env file
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_USER = os.getenv("DB_USER", "root")
-DB_PASS = os.getenv("DB_PASS", "123456")  # Default for development only
+DB_PASS = os.getenv("DB_PASS", "12345")  # Default for development only
 DB_NAME = os.getenv("DB_NAME", "movies_db")
 
 # MongoDB Connection Settings

@@ -1068,3 +1068,134 @@
 2025-11-28 22:25:44,977 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
 2025-11-28 22:25:45,692 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
 2025-11-28 22:25:45,693 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-29 01:31:58,706 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:32:01,504 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:32:01,504 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-29 01:37:08,885 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:37:11,257 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:37:11,257 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-29 01:39:51,365 - INFO - User 672 added movie 1926 to watchlist
+2025-11-29 01:40:33,810 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:40:37,058 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:40:37,059 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-29 01:41:29,834 - INFO - [MAIN] Opening Rating Management - THREE POPUP SEQUENCE
+2025-11-29 01:41:29,835 - INFO - [MAIN] POPUP 1: Action Selection
+2025-11-29 01:41:29,858 - INFO - [POPUP 1] Action Selection Dialog opened for claudetan
+2025-11-29 01:41:32,181 - INFO - [MAIN] Opening Rating Management - THREE POPUP SEQUENCE
+2025-11-29 01:41:32,181 - INFO - [MAIN] POPUP 1: Action Selection
+2025-11-29 01:41:32,190 - INFO - [POPUP 1] Action Selection Dialog opened for test
+2025-11-29 01:41:37,138 - INFO - [POPUP 1] Action selected: add
+2025-11-29 01:41:37,154 - INFO - [MAIN] POPUP 1 Result: add
+2025-11-29 01:41:37,155 - INFO - [MAIN] POPUP 2: Movie Selection for action=add
+2025-11-29 01:41:37,180 - INFO - [POPUP 2] Movie Selection Dialog opened for test, action=add
+2025-11-29 01:41:37,712 - INFO - [POPUP 1] Action selected: add
+2025-11-29 01:41:37,728 - INFO - [MAIN] POPUP 1 Result: add
+2025-11-29 01:41:37,728 - INFO - [MAIN] POPUP 2: Movie Selection for action=add
+2025-11-29 01:41:37,751 - INFO - [POPUP 2] Movie Selection Dialog opened for claudetan, action=add
+2025-11-29 01:41:45,219 - INFO - [POPUP 2] Acquiring lock for userId=672, movieId=201
+2025-11-29 01:41:45,219 - INFO - [LOCK ACQUIRED] User 'test' locked rating (userId=672, movieId=201)
+2025-11-29 01:41:45,224 - INFO - [POPUP 2] ✅ Lock ACQUIRED: userId=672, movieId=201
+2025-11-29 01:41:47,149 - INFO - [MAIN] POPUP 2 Result: movie_id=201, lock=True
+2025-11-29 01:41:47,149 - INFO - [MAIN] POPUP 3: Rating Entry for movieId=201
+2025-11-29 01:41:47,180 - INFO - [POPUP 3] Rating Entry Dialog opened for test, movieId=201
+2025-11-29 01:41:55,502 - INFO - [POPUP 2] User claudetan BLOCKED - rating locked by 'test'
+2025-11-29 01:42:02,213 - INFO - [POPUP 3] Executing transaction: userId=672, movieId=201, rating=5.0
+2025-11-29 01:42:02,215 - INFO - [TRANSACTION BEGIN] Updating rating for userId=672, movieId=201
+2025-11-29 01:42:02,215 - INFO - [TRANSACTION] Deleted 0 old rating(s)
+2025-11-29 01:42:02,216 - INFO - [TRANSACTION] Inserted new rating: 5.0
+2025-11-29 01:42:02,217 - INFO - [TRANSACTION] Verification passed: rating=5.0
+2025-11-29 01:42:02,218 - INFO - [TRANSACTION COMMIT] Rating update successful
+2025-11-29 01:42:02,218 - INFO - [POPUP 3] ✅ Transaction COMMITTED successfully
+2025-11-29 01:42:02,219 - INFO - [LOCK RELEASED] Rating unlocked (userId=672, movieId=201)
+2025-11-29 01:42:02,239 - INFO - [POPUP 3] ✅ Lock RELEASED: movieId=201
+2025-11-29 01:42:04,431 - INFO - [MAIN] POPUP 3 Result: success=True, rating=5.0
+2025-11-29 01:42:05,698 - INFO - [MAIN] THREE POPUP SEQUENCE COMPLETE
+2025-11-29 01:42:05,699 - WARNING - [POPUP 2] Dialog destroyed with active lock - releasing lock
+2025-11-29 01:42:05,699 - INFO - [LOCK RELEASED] Rating unlocked (userId=672, movieId=201)
+2025-11-29 01:42:06,776 - INFO - [POPUP 2] Acquiring lock for userId=673, movieId=201
+2025-11-29 01:42:06,776 - INFO - [LOCK ACQUIRED] User 'claudetan' locked rating (userId=673, movieId=201)
+2025-11-29 01:42:06,779 - INFO - [POPUP 2] ✅ Lock ACQUIRED: userId=673, movieId=201
+2025-11-29 01:42:09,436 - INFO - [MAIN] POPUP 2 Result: movie_id=201, lock=True
+2025-11-29 01:42:09,438 - INFO - [MAIN] POPUP 3: Rating Entry for movieId=201
+2025-11-29 01:42:09,461 - INFO - [POPUP 3] Rating Entry Dialog opened for claudetan, movieId=201
+2025-11-29 01:42:13,908 - INFO - [POPUP 3] Executing transaction: userId=673, movieId=201, rating=4.5
+2025-11-29 01:42:13,909 - INFO - [TRANSACTION BEGIN] Updating rating for userId=673, movieId=201
+2025-11-29 01:42:13,910 - INFO - [TRANSACTION] Deleted 0 old rating(s)
+2025-11-29 01:42:13,910 - INFO - [TRANSACTION] Inserted new rating: 4.5
+2025-11-29 01:42:13,911 - INFO - [TRANSACTION] Verification passed: rating=4.5
+2025-11-29 01:42:13,912 - INFO - [TRANSACTION COMMIT] Rating update successful
+2025-11-29 01:42:13,913 - INFO - [POPUP 3] ✅ Transaction COMMITTED successfully
+2025-11-29 01:42:13,913 - INFO - [LOCK RELEASED] Rating unlocked (userId=673, movieId=201)
+2025-11-29 01:42:13,934 - INFO - [POPUP 3] ✅ Lock RELEASED: movieId=201
+2025-11-29 01:42:15,893 - INFO - [MAIN] POPUP 3 Result: success=True, rating=4.5
+2025-11-29 01:42:17,645 - INFO - [MAIN] THREE POPUP SEQUENCE COMPLETE
+2025-11-29 01:42:17,646 - WARNING - [POPUP 2] Dialog destroyed with active lock - releasing lock
+2025-11-29 01:42:17,646 - INFO - [LOCK RELEASED] Rating unlocked (userId=673, movieId=201)
+2025-11-29 01:42:33,119 - INFO - [MAIN] Opening Rating Management - THREE POPUP SEQUENCE
+2025-11-29 01:42:33,119 - INFO - [MAIN] POPUP 1: Action Selection
+2025-11-29 01:42:33,127 - INFO - [POPUP 1] Action Selection Dialog opened for test
+2025-11-29 01:42:37,257 - INFO - [POPUP 1] Action selected: add
+2025-11-29 01:42:37,269 - INFO - [MAIN] POPUP 1 Result: add
+2025-11-29 01:42:37,269 - INFO - [MAIN] POPUP 2: Movie Selection for action=add
+2025-11-29 01:42:37,279 - INFO - [POPUP 2] Movie Selection Dialog opened for test, action=add
+2025-11-29 01:42:41,781 - INFO - [POPUP 2] Acquiring lock for userId=672, movieId=201
+2025-11-29 01:42:41,782 - INFO - [LOCK ACQUIRED] User 'test' locked rating (userId=672, movieId=201)
+2025-11-29 01:42:41,785 - INFO - [POPUP 2] ✅ Lock ACQUIRED: userId=672, movieId=201
+2025-11-29 01:42:44,972 - INFO - [MAIN] POPUP 2 Result: movie_id=201, lock=True
+2025-11-29 01:42:44,972 - INFO - [MAIN] POPUP 3: Rating Entry for movieId=201
+2025-11-29 01:42:44,997 - INFO - [POPUP 3] Rating Entry Dialog opened for test, movieId=201
+2025-11-29 01:42:47,580 - INFO - [POPUP 3] User cancelled - releasing lock
+2025-11-29 01:42:47,580 - INFO - [LOCK RELEASED] Rating unlocked (userId=672, movieId=201)
+2025-11-29 01:42:47,614 - INFO - [MAIN] POPUP 3 Result: success=False, rating=None
+2025-11-29 01:42:47,615 - INFO - [MAIN] THREE POPUP SEQUENCE COMPLETE
+2025-11-29 01:42:47,615 - WARNING - [POPUP 2] Dialog destroyed with active lock - releasing lock
+2025-11-29 01:42:47,615 - INFO - [LOCK RELEASED] Rating unlocked (userId=672, movieId=201)
+2025-11-29 01:42:47,633 - WARNING - [POPUP 3] Dialog destroyed without commit - releasing lock
+2025-11-29 01:42:47,633 - INFO - [LOCK RELEASED] Rating unlocked (userId=672, movieId=201)
+2025-11-29 01:43:42,943 - ERROR - Failed to delete user 672: (1048, "Column 'userId' cannot be null")
+2025-11-29 01:43:58,262 - ERROR - Failed to delete user 672: (1048, "Column 'userId' cannot be null")
+2025-11-29 01:52:50,777 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:52:53,260 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:52:53,260 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-29 01:53:08,166 - INFO - Set userId to NULL for user 672's ratings (preserving data)
+2025-11-29 01:53:08,166 - INFO - Deleted watchlist entries for user 672
+2025-11-29 01:53:08,166 - INFO - Deleted rating locks for user 672
+2025-11-29 01:53:08,167 - INFO - Deleted user 672 (ratings preserved with NULL userId)
+2025-11-29 01:53:15,146 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:53:17,059 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:53:17,060 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-29 01:54:02,980 - INFO - Set userId to NULL for user 673's ratings (preserving data)
+2025-11-29 01:54:02,980 - INFO - Deleted watchlist entries for user 673
+2025-11-29 01:54:02,981 - INFO - Deleted rating locks for user 673
+2025-11-29 01:54:02,981 - INFO - Deleted user 673 (ratings preserved with NULL userId)
+2025-11-29 01:54:14,385 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:54:17,133 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:54:17,134 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-29 01:57:41,104 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:57:44,349 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 01:57:44,349 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-29 02:04:54,742 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 02:04:57,696 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 02:04:57,698 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-29 02:06:15,939 - INFO - [MAIN] Opening Rating Management - THREE POPUP SEQUENCE
+2025-11-29 02:06:15,939 - INFO - [MAIN] POPUP 1: Action Selection
+2025-11-29 02:06:15,950 - INFO - [POPUP 1] Action Selection Dialog opened for admin
+2025-11-29 02:06:17,455 - INFO - [POPUP 1] Action selected: add
+2025-11-29 02:06:17,469 - INFO - [MAIN] POPUP 1 Result: add
+2025-11-29 02:06:17,469 - INFO - [MAIN] POPUP 2: Movie Selection for action=add
+2025-11-29 02:06:17,490 - INFO - [POPUP 2] Movie Selection Dialog opened for admin, action=add
+2025-11-29 02:06:22,435 - INFO - [POPUP 2] Acquiring lock for userId=1, movieId=201
+2025-11-29 02:06:22,436 - INFO - [LOCK ACQUIRED] User 'admin' locked rating (userId=1, movieId=201)
+2025-11-29 02:06:22,439 - INFO - [POPUP 2] ✅ Lock ACQUIRED: userId=1, movieId=201
+2025-11-29 02:06:30,808 - INFO - [MAIN] POPUP 2 Result: movie_id=201, lock=True
+2025-11-29 02:06:30,808 - INFO - [MAIN] POPUP 3: Rating Entry for movieId=201
+2025-11-29 02:06:30,838 - INFO - [POPUP 3] Rating Entry Dialog opened for admin, movieId=201
+2025-11-29 02:06:31,610 - INFO - [MAIN] POPUP 3 Result: success=False, rating=None
+2025-11-29 02:06:31,611 - INFO - [MAIN] THREE POPUP SEQUENCE COMPLETE
+2025-11-29 02:06:31,612 - WARNING - [POPUP 2] Dialog destroyed with active lock - releasing lock
+2025-11-29 02:06:31,612 - INFO - [LOCK RELEASED] Rating unlocked (userId=1, movieId=201)
+2025-11-29 02:06:31,633 - WARNING - [POPUP 3] Dialog destroyed without commit - releasing lock
+2025-11-29 02:06:31,634 - INFO - [LOCK RELEASED] Rating unlocked (userId=1, movieId=201)
+2025-11-29 02:20:08,783 - INFO - Connecting to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 02:20:11,903 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-29 02:20:11,904 - INFO - Using database: movies_nosql, collection: tmdb_movies
