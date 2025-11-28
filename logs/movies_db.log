@@ -1031,3 +1031,8 @@
 2025-11-28 01:04:29,238 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
 2025-11-28 01:04:29,239 - INFO - Using database: movies_nosql, collection: tmdb_movies
 2025-11-28 01:05:00,853 - WARNING - WATCHLIST table doesn't exist: (1146, "Table 'movies_db.watchlist' doesn't exist")
+2025-11-28 15:04:28,911 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-28 15:04:28,911 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-28 15:07:57,319 - INFO - Successfully connected to MongoDB Atlas: cluster0.qrc4kkf.mongodb.net
+2025-11-28 15:07:57,320 - INFO - Using database: movies_nosql, collection: tmdb_movies
+2025-11-28 15:08:07,439 - WARNING - WATCHLIST table doesn't exist: (1146, "Table 'movies_db.watchlist' doesn't exist")
