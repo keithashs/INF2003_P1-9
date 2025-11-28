@@ -2,7 +2,7 @@
 # Python Dependencies for TMDB Movie Database
 # ============================================================
 # These packages are required for the hybrid SQL-NoSQL
-# movie database application.
+# movie database application (both Tkinter and Streamlit versions).
 # ============================================================
 
 # Database Connectors
@@ -14,4 +14,14 @@ pymongo>=4.6.0          # MongoDB connector
 # --------------------
 bcrypt>=4.1.0           # Password hashing (industry standard)
 
-# No additional GUI packages needed - tkinter is included with Python
+# Web Framework (for Streamlit deployment)
+# --------------------
+streamlit>=1.28.0       # Web application framework
+pandas>=2.0.0           # Data manipulation and display
+plotly>=5.17.0          # Interactive charts and visualizations
+
+# Utilities
+# --------------------
+python-dotenv>=1.0.0    # Environment variable management
+
+# Note: tkinter is included with Python (for desktop GUI version)

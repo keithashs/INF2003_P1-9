@@ -1,0 +1,66 @@
+# Environment variables and secrets
+.env
+.env.local
+.env.production
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# CSV data files (if needed)
+# Uncomment if you don't want to commit large CSV files
+# *.csv
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Streamlit
+.streamlit/credentials.toml
+
+# Backup files
+*.bak
+*.backup
