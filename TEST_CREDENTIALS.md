@@ -14,7 +14,7 @@
 - **Port:** 3306
 - **Database:** movies_db
 - **User:** root
-- **Password:** 12345
+- **Password:** 12345 *(use your own SQL password)*
 
 ### MongoDB Atlas
 ```
