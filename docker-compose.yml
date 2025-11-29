@@ -1,0 +1,44 @@
+services:
+  mariadb:
+    image: mariadb:10.11
+    container_name: movies_mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: 12345
+      MARIADB_ROOT_HOST: '%'
+      MARIADB_DATABASE: movies_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./1_create_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    command: --bind-address=0.0.0.0 --lower_case_table_names=1
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  gui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: movies_gui
+    restart: always
+    ports:
+      - "6080:6080"
+    environment:
+      DISPLAY: ":99"
+      DB_HOST: mariadb
+      DB_USER: root
+      DB_PASS: "12345"
+      DB_NAME: movies_db
+      MONGO_URI: "mongodb+srv://nkt12385_db_user:Keetian12345@cluster0.qrc4kkf.mongodb.net/"
+      AUTO_GUEST: "true"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+volumes:
+  mariadb_data:
