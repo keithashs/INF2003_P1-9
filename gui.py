@@ -5571,16 +5571,33 @@ class MovieApp(tk.Tk):
                 parent=self
             )
             
-            # If user deleted their own account, log them out
+            # If user deleted their own account, log them out and return to login screen
             if user_id == CURRENT_USER["userId"]:
                 messagebox.showinfo(
                     "Logged Out",
                     "Your account has been deleted.\n\n"
-                    "The application will now close.",
+                    "You will be returned to the login screen.",
                     parent=self
                 )
-                self.destroy()
-                sys.exit(0)
+                # Reset current user and return to login screen instead of exiting
+                CURRENT_USER.clear()
+                CURRENT_USER.update({"userId": None, "username": None, "role": None})
+                
+                # Get reference to the main app window
+                main_app = self.winfo_toplevel()
+                
+                # Schedule restart after current event processing completes
+                def restart_app():
+                    try:
+                        main_app.destroy()
+                    except:
+                        pass
+                    # Create new MovieApp instance (which shows login screen)
+                    new_app = MovieApp()
+                    new_app.mainloop()
+                
+                # Use after_idle to restart after current operations complete
+                main_app.after(100, restart_app)
 
     def handle_search_users(self):
         """
