@@ -17,11 +17,11 @@ CREATE TEMPORARY TABLE user_id_mapping (
     INDEX (new_userId)
 );
 
--- Step 2: Generate sequential mapping for all existing users
+-- Step 2: Generate sequential mapping for all existing USERS
 SET @new_id = 0;
 INSERT INTO user_id_mapping (old_userId, new_userId)
 SELECT userId, (@new_id := @new_id + 1) as new_userId
-FROM users
+FROM USERS
 ORDER BY userId;
 
 -- Step 3: Show the mapping (sample)
@@ -31,19 +31,19 @@ FROM user_id_mapping
 WHERE old_userId IN (1, 2, 671, 1237, 1238, 1239, 1240)
 ORDER BY old_userId;
 
--- Step 4: Create backup table for users
+-- Step 4: Create backup table for USERS
 DROP TABLE IF EXISTS users_backup;
-CREATE TABLE users_backup AS SELECT * FROM users;
+CREATE TABLE users_backup AS SELECT * FROM USERS;
 SELECT 'Backup created: users_backup' as info;
 
 -- Step 5: Disable foreign key checks temporarily
 SET FOREIGN_KEY_CHECKS = 0;
 
--- Step 6: Update ratings table with new user IDs
-UPDATE ratings r
+-- Step 6: Update RATINGS table with new user IDs
+UPDATE RATINGS r
 INNER JOIN user_id_mapping m ON r.userId = m.old_userId
 SET r.userId = m.new_userId;
-SELECT 'Updated ratings table' as info;
+SELECT 'Updated RATINGS table' as info;
 
 -- Step 7: Update rating_locks table with new user IDs
 UPDATE rating_locks rl
@@ -51,10 +51,10 @@ INNER JOIN user_id_mapping m ON rl.userId = m.old_userId
 SET rl.userId = m.new_userId;
 SELECT 'Updated rating_locks table' as info;
 
--- Step 8: Create a new users table with new IDs
-CREATE TABLE users_new LIKE users;
+-- Step 8: Create a new USERS table with new IDs
+CREATE TABLE users_new LIKE USERS;
 
--- Step 9: Copy users with new IDs
+-- Step 9: Copy USERS with new IDs
 INSERT INTO users_new (userId, username, email, password_hash, role, created_at)
 SELECT 
     m.new_userId,
@@ -63,17 +63,17 @@ SELECT
     u.password_hash,
     u.role,
     u.created_at
-FROM users u
+FROM USERS u
 INNER JOIN user_id_mapping m ON u.userId = m.old_userId
 ORDER BY m.new_userId;
 
--- Step 10: Drop old users table and rename new one
-DROP TABLE users;
-RENAME TABLE users_new TO users;
-SELECT 'Users table renumbered' as info;
+-- Step 10: Drop old USERS table and rename new one
+DROP TABLE USERS;
+RENAME TABLE users_new TO USERS;
+SELECT 'USERS table renumbered' as info;
 
 -- Step 11: Reset AUTO_INCREMENT to next available ID
-ALTER TABLE users AUTO_INCREMENT = 676;
+ALTER TABLE USERS AUTO_INCREMENT = 676;
 SELECT 'AUTO_INCREMENT reset to 676' as info;
 
 -- Step 12: Re-enable foreign key checks
@@ -87,32 +87,32 @@ SELECT
     COUNT(*) as total_users,
     MAX(userId) - MIN(userId) + 1 as expected_count,
     MAX(userId) - MIN(userId) + 1 - COUNT(*) as gaps
-FROM users;
+FROM USERS;
 
--- Step 14: Show sample of renumbered users
-SELECT 'Sample of Renumbered Users:' as info;
+-- Step 14: Show sample of renumbered USERS
+SELECT 'Sample of Renumbered USERS:' as info;
 SELECT userId, username, email, role 
-FROM users 
+FROM USERS 
 WHERE userId IN (1, 2, 100, 200, 300, 400, 500, 600, 670, 671, 672, 673, 674, 675)
 ORDER BY userId;
 
--- Step 15: Verify ratings are still linked correctly
-SELECT 'Ratings Count by User (Sample):' as info;
+-- Step 15: Verify RATINGS are still linked correctly
+SELECT 'RATINGS Count by User (Sample):' as info;
 SELECT 
     u.userId,
     u.username,
     COUNT(r.rating) as rating_count
-FROM users u
-LEFT JOIN ratings r ON u.userId = r.userId
+FROM USERS u
+LEFT JOIN RATINGS r ON u.userId = r.userId
 WHERE u.userId IN (1, 2, 100, 500, 675)
 GROUP BY u.userId, u.username
 ORDER BY u.userId;
 
--- Step 16: Check for any orphaned ratings (should be 0)
-SELECT 'Orphaned Ratings Check:' as info;
+-- Step 16: Check for any orphaned RATINGS (should be 0)
+SELECT 'Orphaned RATINGS Check:' as info;
 SELECT COUNT(*) as orphaned_ratings
-FROM ratings r
-LEFT JOIN users u ON r.userId = u.userId
+FROM RATINGS r
+LEFT JOIN USERS u ON r.userId = u.userId
 WHERE u.userId IS NULL;
 
 SELECT '============================================' as info;
@@ -124,11 +124,11 @@ SELECT '============================================' as info;
 -- ===================================================================
 -- TRANSFER ADMIN RATINGS TO ANOTHER USER
 -- ===================================================================
--- This section transfers all ratings made by admin (userId=1) 
--- to another user to keep admin account clean (no ratings).
+-- This section transfers all RATINGS made by admin (userId=1) 
+-- to another user to keep admin account clean (no RATINGS).
 --
 -- SAFETY CHECKS:
--- 1. Check how many ratings admin has
+-- 1. Check how many RATINGS admin has
 -- 2. Verify target user exists
 -- 3. Check for conflicts (if target user already rated same movies)
 -- 4. Perform the transfer
@@ -139,29 +139,29 @@ SELECT '============================================' as info;
 SELECT 'STARTING ADMIN RATINGS TRANSFER' as info;
 SELECT '============================================' as info;
 
--- Step 1: Check admin's ratings
-SELECT 'Admin (userId=1) currently has these ratings:' AS info;
+-- Step 1: Check admin's RATINGS
+SELECT 'Admin (userId=1) currently has these RATINGS:' AS info;
 SELECT 
     r.userId,
     r.movieId,
     m.title,
     r.rating,
     FROM_UNIXTIME(r.timestamp) AS rated_at
-FROM ratings r
+FROM RATINGS r
 INNER JOIN movies m ON r.movieId = m.movieId
 WHERE r.userId = 1
 ORDER BY r.timestamp DESC;
 
 SELECT COUNT(*) AS admin_rating_count 
-FROM ratings 
+FROM RATINGS 
 WHERE userId = 1;
 
 -- Step 2: Choose a target user (MODIFY THIS!)
 -- Option A: Transfer to user ID 2
 SET @target_user_id = 2;
 
--- Option B: Create a new user for these ratings
--- INSERT INTO users (userId, username, email, role, password_hash)
+-- Option B: Create a new user for these RATINGS
+-- INSERT INTO USERS (userId, username, email, role, password_hash)
 -- VALUES (999, 'movie_reviewer', 'reviewer@example.com', 'user', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5aqaaf6V.Ps2G');
 -- SET @target_user_id = 999;
 
@@ -171,59 +171,59 @@ SELECT
         WHEN COUNT(*) > 0 THEN CONCAT('Target user ', @target_user_id, ' exists')
         ELSE CONCAT('ERROR: Target user ', @target_user_id, ' does NOT exist!')
     END AS user_check
-FROM users 
+FROM USERS 
 WHERE userId = @target_user_id;
 
--- Step 4: Check for conflicts (movies both users rated)
-SELECT 'Potential conflicts (both users rated same movies):' AS info;
+-- Step 4: Check for conflicts (movies both USERS rated)
+SELECT 'Potential conflicts (both USERS rated same movies):' AS info;
 SELECT 
     admin_r.movieId,
     m.title,
     admin_r.rating AS admin_rating,
     target_r.rating AS target_user_rating
-FROM ratings admin_r
-INNER JOIN ratings target_r ON admin_r.movieId = target_r.movieId
+FROM RATINGS admin_r
+INNER JOIN RATINGS target_r ON admin_r.movieId = target_r.movieId
 INNER JOIN movies m ON admin_r.movieId = m.movieId
 WHERE admin_r.userId = 1 
   AND target_r.userId = @target_user_id;
 
--- Step 5: Handle conflicts - Delete target user's ratings for conflicting movies
--- (We'll keep admin's ratings and transfer them)
-SELECT 'Deleting conflicting ratings from target user...' AS info;
-DELETE FROM ratings
+-- Step 5: Handle conflicts - Delete target user's RATINGS for conflicting movies
+-- (We'll keep admin's RATINGS and transfer them)
+SELECT 'Deleting conflicting RATINGS from target user...' AS info;
+DELETE FROM RATINGS
 WHERE userId = @target_user_id
   AND movieId IN (
       SELECT movieId 
-      FROM ratings 
+      FROM RATINGS 
       WHERE userId = 1
   );
 
--- Step 6: Transfer all admin ratings to target user
-SELECT 'Transferring admin ratings to target user...' AS info;
-UPDATE ratings
+-- Step 6: Transfer all admin RATINGS to target user
+SELECT 'Transferring admin RATINGS to target user...' AS info;
+UPDATE RATINGS
 SET userId = @target_user_id
 WHERE userId = 1;
 
 -- Step 7: Verify the transfer
-SELECT 'Admin ratings after transfer:' AS info;
+SELECT 'Admin RATINGS after transfer:' AS info;
 SELECT COUNT(*) AS admin_rating_count 
-FROM ratings 
+FROM RATINGS 
 WHERE userId = 1;
 
-SELECT CONCAT('Target user (', @target_user_id, ') ratings after transfer:') AS info;
+SELECT CONCAT('Target user (', @target_user_id, ') RATINGS after transfer:') AS info;
 SELECT COUNT(*) AS target_user_rating_count 
-FROM ratings 
+FROM RATINGS 
 WHERE userId = @target_user_id;
 
--- Step 8: Show sample of transferred ratings
-SELECT 'Sample of transferred ratings:' AS info;
+-- Step 8: Show sample of transferred RATINGS
+SELECT 'Sample of transferred RATINGS:' AS info;
 SELECT 
     r.userId,
     r.movieId,
     m.title,
     r.rating,
     FROM_UNIXTIME(r.timestamp) AS rated_at
-FROM ratings r
+FROM RATINGS r
 INNER JOIN movies m ON r.movieId = m.movieId
 WHERE r.userId = @target_user_id
 ORDER BY r.timestamp DESC
@@ -231,7 +231,7 @@ LIMIT 10;
 
 SELECT '============================================' as info;
 SELECT 'TRANSFER COMPLETE!' as info;
-SELECT 'Admin account now has 0 ratings.' as info;
+SELECT 'Admin account now has 0 RATINGS.' as info;
 SELECT '============================================' as info;
 
 -- Re-enable safe update mode

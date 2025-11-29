@@ -3,6 +3,13 @@
 -- MariaDB Schema for Relational Data
 -- ============================================================
 
+-- Grant remote access for root user (for Docker containers)
+-- Using mysql_native_password for compatibility with older clients
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '12345';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+ALTER USER 'root'@'%' IDENTIFIED VIA mysql_native_password USING PASSWORD('12345');
+FLUSH PRIVILEGES;
+
 -- Drop existing database if it exists
 DROP DATABASE IF EXISTS movies_db;
 

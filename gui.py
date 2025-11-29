@@ -11199,5 +11199,17 @@ if __name__ == "__main__":
     # Test 3: Concurrent updates stress test
     # test_concurrent_updates()
     
-    app = MovieApp()
+    # Check for AUTO_GUEST environment variable for Docker deployment
+    auto_guest = os.getenv("AUTO_GUEST", "").lower() in ("true", "1", "yes")
+    if auto_guest:
+        # Auto-login as guest for Docker/web deployment
+        CURRENT_USER.update({
+            "userId": None,
+            "username": "GUEST",
+            "email": None,
+            "role": "guest",
+        })
+        app = MovieApp(skip_login=True)
+    else:
+        app = MovieApp()
     app.mainloop()
