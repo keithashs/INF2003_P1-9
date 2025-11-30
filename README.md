@@ -3,6 +3,15 @@
 
 ---
 
+## 🌐 Live Demo
+**Try it now (no installation required):**
+- **User A:** http://34.87.19.224:6080/vnc.html
+- **User B:** http://34.87.19.224:6081/vnc.html (for concurrency testing)
+
+Login: `admin` / `password123` or `testuser` / `password123`
+
+---
+
 ## Project Overview
 A hybrid database system integrating MariaDB (SQL) and MongoDB (NoSQL) for movie data management, demonstrating polyglot persistence principles.
 
@@ -10,16 +19,21 @@ A hybrid database system integrating MariaDB (SQL) and MongoDB (NoSQL) for movie
 
 ## Quick Start
 
-### Prerequisites
+### Option 1: Web Demo (Recommended)
+Just open the live demo links above - everything is pre-configured!
+
+### Option 2: Local Installation
+
+#### Prerequisites
 - Python 3.8+
 - MariaDB 10.x / MySQL 5.7+
 - MongoDB Atlas account
 
-### Installation
+#### Installation
 
 1. Install Dependencies
 ```bash
-python setup.py
+pip install -r requirements.txt
 ```
 
 2. Configure Database (Optional)
@@ -35,7 +49,7 @@ $env:MONGO_CLUSTER="your_cluster.mongodb.net"
 mysql -u root -p < 1_create_schema.sql
 python 2_import_data.py
 mysql -u root -p movies_db < 3_create_indexes.sql
-# Run remaining SQL scripts (4-8) in order
+# Run remaining SQL scripts (4-9) in order
 ```
 
 4. Run Application
