@@ -3,8 +3,7 @@
 
 ---
 
-## Live Demo
-**Try it now (no installation required):**
+## Live Demo (on Google Cloud Engine)
 - **User A:** http://34.87.19.224:6080/vnc.html
 - **User B:** http://34.87.19.224:6081/vnc.html (for concurrency testing)
 
