@@ -62,5 +62,68 @@ services:
       mariadb:
         condition: service_healthy
 
+  # GUI Instance 3 (User C) - Port 6082
+  gui3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: movies_gui3
+    restart: always
+    ports:
+      - "6082:6080"
+    environment:
+      DISPLAY: ":99"
+      DB_HOST: mariadb
+      DB_USER: root
+      DB_PASS: "12345"
+      DB_NAME: movies_db
+      MONGO_URI: "mongodb+srv://nkt12385_db_user:Keetian12345@cluster0.qrc4kkf.mongodb.net/"
+      AUTO_GUEST: "true"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+  # GUI Instance 4 (User D) - Port 6083
+  gui4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: movies_gui4
+    restart: always
+    ports:
+      - "6083:6080"
+    environment:
+      DISPLAY: ":99"
+      DB_HOST: mariadb
+      DB_USER: root
+      DB_PASS: "12345"
+      DB_NAME: movies_db
+      MONGO_URI: "mongodb+srv://nkt12385_db_user:Keetian12345@cluster0.qrc4kkf.mongodb.net/"
+      AUTO_GUEST: "true"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+  # GUI Instance 5 (User E) - Port 6084
+  gui5:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: movies_gui5
+    restart: always
+    ports:
+      - "6084:6080"
+    environment:
+      DISPLAY: ":99"
+      DB_HOST: mariadb
+      DB_USER: root
+      DB_PASS: "12345"
+      DB_NAME: movies_db
+      MONGO_URI: "mongodb+srv://nkt12385_db_user:Keetian12345@cluster0.qrc4kkf.mongodb.net/"
+      AUTO_GUEST: "true"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
 volumes:
   mariadb_data:
