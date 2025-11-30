@@ -3,7 +3,7 @@
 
 ---
 
-## 🌐 Live Demo
+## Live Demo
 **Try it now (no installation required):**
 - **User A:** http://34.87.19.224:6080/vnc.html
 - **User B:** http://34.87.19.224:6081/vnc.html (for concurrency testing)
@@ -20,7 +20,7 @@ A hybrid database system integrating MariaDB (SQL) and MongoDB (NoSQL) for movie
 ## Quick Start
 
 ### Option 1: Web Demo (Recommended)
-Just open the live demo links above - everything is pre-configured!
+Live demo links above, everything is pre-configured
 
 ### Option 2: Local Installation
 
