@@ -20,6 +20,7 @@ services:
       retries: 10
       start_period: 60s
 
+  # GUI Instance 1 (User A) - Port 6080
   gui:
     build:
       context: .
@@ -28,6 +29,27 @@ services:
     restart: always
     ports:
       - "6080:6080"
+    environment:
+      DISPLAY: ":99"
+      DB_HOST: mariadb
+      DB_USER: root
+      DB_PASS: "12345"
+      DB_NAME: movies_db
+      MONGO_URI: "mongodb+srv://nkt12385_db_user:Keetian12345@cluster0.qrc4kkf.mongodb.net/"
+      AUTO_GUEST: "true"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+  # GUI Instance 2 (User B) - Port 6081 for concurrency testing
+  gui2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: movies_gui2
+    restart: always
+    ports:
+      - "6081:6080"
     environment:
       DISPLAY: ":99"
       DB_HOST: mariadb
