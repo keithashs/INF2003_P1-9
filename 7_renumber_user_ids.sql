@@ -156,14 +156,10 @@ SELECT COUNT(*) AS admin_rating_count
 FROM RATINGS 
 WHERE userId = 1;
 
--- Step 2: Choose a target user (MODIFY THIS!)
--- Option A: Transfer to user ID 2
-SET @target_user_id = 2;
-
--- Option B: Create a new user for these RATINGS
--- INSERT INTO USERS (userId, username, email, role, password_hash)
--- VALUES (999, 'movie_reviewer', 'reviewer@example.com', 'user', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5aqaaf6V.Ps2G');
--- SET @target_user_id = 999;
+-- Step 2: Choose a target user
+-- Transfer to user ID 3 (NOT testuser which is ID 2)
+-- This keeps testuser's profile clean for testing
+SET @target_user_id = 3;
 
 -- Step 3: Verify target user exists
 SELECT 

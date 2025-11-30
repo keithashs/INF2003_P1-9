@@ -47,6 +47,7 @@ mysql -h "$DB_HOST" -P 3306 --protocol=tcp --skip-ssl -u "$DB_USER" -p"$DB_PASS"
 mysql -h "$DB_HOST" -P 3306 --protocol=tcp --skip-ssl -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < 6_create_watchlist.sql 2>&1 || echo "Watchlist script done"
 mysql -h "$DB_HOST" -P 3306 --protocol=tcp --skip-ssl -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < 7_renumber_user_ids.sql 2>&1 || echo "Renumber script done"
 mysql -h "$DB_HOST" -P 3306 --protocol=tcp --skip-ssl -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < 8_update_ratings_schema.sql 2>&1 || echo "Ratings schema script done"
+mysql -h "$DB_HOST" -P 3306 --protocol=tcp --skip-ssl -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < 9_clean_test_accounts.sql 2>&1 || echo "Clean test accounts done"
 
 echo "Starting GUI application..."
 python gui.py

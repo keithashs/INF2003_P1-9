@@ -562,16 +562,21 @@ def add_movie_to_sql(title, release_date=None):
     if CURRENT_USER['role'] != 'admin':
         print(f"[ERROR add_movie_to_sql] Permission denied - role is '{CURRENT_USER['role']}', not 'admin'")
         return False, None
-        
-    sql = """
-        INSERT INTO movies (title, release_date)
-        VALUES (%s, %s)
-    """
+    
     conn = get_connection()
     try:
         with conn.cursor() as cur:
-            cur.execute(sql, (title, release_date))
-            movie_id = cur.lastrowid
+            # Get the next available movieId (handles both AUTO_INCREMENT and non-AUTO_INCREMENT tables)
+            cur.execute("SELECT COALESCE(MAX(movieId), 0) + 1 AS next_id FROM movies")
+            next_id = cur.fetchone()['next_id']
+            
+            # Insert with explicit movieId
+            sql = """
+                INSERT INTO movies (movieId, title, release_date)
+                VALUES (%s, %s, %s)
+            """
+            cur.execute(sql, (next_id, title, release_date))
+            movie_id = next_id
         conn.commit()
         print(f"[DEBUG add_movie_to_sql] Success! movie_id={movie_id}")
         return True, movie_id

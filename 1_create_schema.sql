@@ -36,7 +36,7 @@ CREATE TABLE USERS (
 -- Stores core movie information from MovieLens dataset
 -- ============================================================
 CREATE TABLE MOVIES (
-    movieId INT PRIMARY KEY,
+    movieId INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(500) NOT NULL,
     release_date DATE,
     INDEX idx_title (title),
