@@ -33,6 +33,7 @@ mysql -u root -p movies_db < 5_update_user_names.sql
 mysql -u root -p movies_db < 6_create_watchlist.sql
 mysql -u root -p movies_db < 7_renumber_user_ids.sql
 mysql -u root -p movies_db < 8_update_ratings_schema.sql
+mysql -u root -p movies_db < 9_clean_test_accounts.sql
 ```
 
 ## Step 4: Launch Application

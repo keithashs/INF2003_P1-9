@@ -4,8 +4,15 @@
 ---
 
 ## Live Demo (on Google Cloud Engine)
-- **User A:** http://34.87.19.224:6080/vnc.html
-- **User B:** http://34.87.19.224:6081/vnc.html (for concurrency testing)
+| Session | URL |
+|---------|-----|
+| User A | http://34.87.19.224:6080/vnc.html |
+| User B | http://34.87.19.224:6081/vnc.html |
+| User C | http://34.87.19.224:6082/vnc.html |
+| User D | http://34.87.19.224:6083/vnc.html |
+| User E | http://34.87.19.224:6084/vnc.html |
+
+*5 sessions available for multi-user concurrency testing*
 
 Login: `admin` / `password123` or `testuser` / `password123`
 
